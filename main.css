@@ -567,7 +567,6 @@ nav ul li a.active {
 @media (max-width: 768px) {
     header {
         padding: 12px 15px;
-        flex-wrap: wrap;
     }
 
     header h1 a {
