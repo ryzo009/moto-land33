@@ -1,0 +1,613 @@
+:root {
+    --accent-color: #ff4500;
+    --accent-glow: rgba(255, 69, 0, 0.3);
+}
+
+body.theme-cyan {
+    --accent-color: #00e1ff;
+    --accent-glow: rgba(0, 225, 255, 0.3);
+}
+
+body.theme-green {
+    --accent-color: #00ff88;
+    --accent-glow: rgba(0, 255, 136, 0.3);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #0a0a16;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+}
+
+/* Шапка */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+header h1 a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.8rem;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+nav ul li a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+    color: var(--accent-color) !important;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.theme-btn {
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--accent-color);
+    color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.theme-btn:hover {
+    transform: scale(1.05);
+    background: var(--accent-color);
+    color: #000;
+    font-weight: bold;
+}
+
+.button1 {
+    padding: 8px 20px;
+    background: var(--accent-color);
+    border: none;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.button1:hover {
+    opacity: 0.9;
+}
+
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 28px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.hamburger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #fff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: translateY(8.5px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+    transform: translateY(-8.5px) rotate(-45deg);
+}
+
+/* Панель управления */
+.controls {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    opacity: 0.6;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 15px var(--accent-glow) !important;
+}
+
+.filter-group, .sort-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.control-label {
+    font-size: 0.85rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 90px;
+}
+
+.filter-buttons, .sort-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: white;
+    box-shadow: 0 4px 12px var(--accent-glow) !important;
+}
+
+.sort-btn {
+    padding: 8px 16px;
+    background: rgba(0, 225, 255, 0.05);
+    border: 1px solid rgba(0, 225, 255, 0.2);
+    color: #00e1ff;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.sort-btn:hover, .sort-btn.active {
+    background: #00e1ff;
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 225, 255, 0.3);
+}
+
+/* Каталог и карточки */
+.catalog {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 360px));
+    justify-content: center;
+    gap: 25px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color) !important;
+}
+
+.badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #000;
+    padding: 4px 10px;
+    border-radius: 12px;
+    z-index: 2;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.power-bar-container {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin: 5px 0 10px;
+    overflow: hidden;
+}
+
+.power-bar {
+    height: 100%;
+    border-radius: 3px;
+}
+
+.card-btn {
+    margin-top: auto;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card-btn:hover {
+    background: var(--accent-color) !important;
+}
+
+.card-compare-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #aaa;
+    cursor: pointer;
+    user-select: none;
+    margin-top: 5px;
+}
+
+.card-compare-label input[type="checkbox"] {
+    accent-color: var(--accent-color);
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* Плавающая плашка */
+.compare-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(18, 18, 37, 0.95);
+    border: 1px solid var(--accent-color);
+    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    z-index: 99;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+}
+
+.compare-btn {
+    padding: 8px 18px;
+    background: var(--accent-color);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.compare-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Таблица сравнения */
+.compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.compare-table th, .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.compare-table th {
+    background: rgba(255, 255, 255, 0.05);
+    color: #888;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.compare-table td img {
+    width: 120px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.compare-table td {
+    color: #fff;
+    font-size: 0.95rem;
+}
+
+/* Модалки */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: #121225;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    position: relative;
+    padding: 30px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close-btn:hover {
+    color: var(--accent-color);
+}
+
+.modal-body {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.modal-body img {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    object-fit: contain;
+}
+
+.modal-info {
+    flex: 1;
+    min-width: 280px;
+}
+
+.modal-info h2 {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+/* Кнопка Избранного (Сердечко) */
+.favorite-btn {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 3;
+    user-select: none;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.15);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.favorite-btn.active {
+    border-color: #ff4500;
+    box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+}
+
+/* Авторизация */
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 8px;
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-tab.active {
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form input {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: #fff;
+    outline: none;
+}
+
+.auth-form input:focus {
+    border-color: var(--accent-color);
+}
+
+.auth-submit-btn {
+    padding: 12px;
+    background: var(--accent-color);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-submit-btn:hover {
+    transform: scale(1.02);
+}
+
+.auth-error {
+    color: #ff4444;
+    font-size: 0.85rem;
+    margin: -5px 0 0;
+    min-height: 18px;
+}
+
+.user-profile-btn {
+    background: rgba(0, 255, 136, 0.15) !important;
+    border: 1px solid #00ff88 !important;
+    color: #00ff88 !important;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 768px) {
+    header {
+        padding: 15px 20px;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 75%;
+        max-width: 300px;
+        height: 100vh;
+        background: rgba(15, 15, 20, 0.95);
+        backdrop-filter: blur(15px);
+        padding: 80px 30px 30px;
+        transition: right 0.4s ease;
+        z-index: 1000;
+    }
+
+    nav.active {
+        right: 0;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .controls {
+        padding: 15px;
+        margin: 15px;
+    }
+
+    .filter-group, .sort-group {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .catalog {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+}
