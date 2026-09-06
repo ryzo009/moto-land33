@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactsModal = document.getElementById('contactsModal');
     const authModal = document.getElementById('authModal');
     const compareModal = document.getElementById('compareModal');
+    const profileModal = document.getElementById('profileModal');
 
     // Ссылки в меню
     const aboutLink = document.getElementById('aboutLink');
@@ -58,11 +59,96 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Управление состоянием авторизации и выпадающим меню
+    let currentUser = localStorage.getItem('motoLandUser') || null;
+
+    function updateAuthButtonUI() {
+        if (!authBtn) return;
+        if (currentUser) {
+            authBtn.textContent = currentUser;
+            authBtn.classList.add('logged-in');
+        } else {
+            authBtn.textContent = 'Авторизоваться';
+            authBtn.classList.remove('logged-in');
+        }
+    }
+
+    updateAuthButtonUI();
+
+    // Создаем выпадающее меню профиля
+    let profileDropdown = document.createElement('div');
+    profileDropdown.className = 'profile-dropdown';
+    profileDropdown.style.cssText = `
+        display: none;
+        position: absolute;
+        right: 20px;
+        top: 70px;
+        background: #1a1a1a;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 8px;
+        flex-direction: column;
+        z-index: 1000;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        overflow: hidden;
+    `;
+    profileDropdown.innerHTML = `
+        <button id="profileBtn" style="background:none; border:none; color:#fff; padding:12px 20px; text-align:left; cursor:pointer; font-size:14px; border-bottom:1px solid rgba(255,255,255,0.05);">👤 Личный кабинет</button>
+        <button id="logoutBtn" style="background:none; border:none; color:#ff4500; padding:12px 20px; text-align:left; cursor:pointer; font-size:14px;">🚪 Выйти</button>
+    `;
+    document.body.appendChild(profileDropdown);
+
+    // Клик по кнопке в шапке
     if (authBtn) {
-        authBtn.addEventListener('click', () => {
-            if (authModal) authModal.style.display = 'flex';
+        authBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (currentUser) {
+                const isVisible = profileDropdown.style.display === 'flex';
+                profileDropdown.style.display = isVisible ? 'none' : 'flex';
+            } else {
+                if (authModal) authModal.style.display = 'flex';
+            }
         });
     }
+
+    // Кнопка "Личный кабинет" в меню — открывает красивую модалку с таблицей
+    const profileBtn = document.getElementById('profileBtn');
+    if (profileBtn) {
+        profileBtn.addEventListener('click', () => {
+            profileDropdown.style.display = 'none';
+            
+            document.getElementById('profileName').textContent = currentUser;
+            
+            const favorites = JSON.parse(localStorage.getItem('motoFavorites')) || [];
+            document.getElementById('profileFavCount').textContent = `${favorites.length} шт.`;
+
+            const currentTheme = localStorage.getItem('motoLandTheme') || 'theme-orange';
+            let themeName = 'Огонь 🔥';
+            if (currentTheme === 'theme-cyan') themeName = 'Киберпанк 💎';
+            if (currentTheme === 'theme-green') themeName = 'Неон ⚡';
+            document.getElementById('profileTheme').textContent = themeName;
+
+            if (profileModal) profileModal.style.display = 'flex';
+        });
+    }
+
+    // Кнопка "Выйти" в меню
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            profileDropdown.style.display = 'none';
+            currentUser = null;
+            localStorage.removeItem('motoLandUser');
+            updateAuthButtonUI();
+            alert('Вы вышли из аккаунта.');
+        });
+    }
+
+    // Закрытие выпадающего меню при клике вне его
+    window.addEventListener('click', (e) => {
+        if (!profileDropdown.contains(e.target) && e.target !== authBtn) {
+            profileDropdown.style.display = 'none';
+        }
+    });
 
     // Закрытие всех модалок по крестику
     document.querySelectorAll('.close-btn').forEach(btn => {
@@ -350,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const specsList = ['Тип', 'Год', 'Объем', 'Мощность', 'Вес'];
             specsList.forEach((specName, idx) => {
                 html += `<tr><td><strong>${specName}</strong></td>`;
+                selectedBilsLoop:
                 selectedBikes.forEach(title => {
                     const card = Array.from(cards).find(c => c.querySelector('h3').textContent.trim() === title);
                     const specText = card ? card.querySelectorAll('.specs p')[idx].innerHTML : '';
@@ -384,4 +471,44 @@ document.addEventListener('DOMContentLoaded', () => {
             loginForm.style.display = 'none';
         });
     }
+
+    // ОБРАБОТЧИК ФОРМ АВТОРИЗАЦИИ И РЕГИСТРАЦИИ
+    const handleAuthSubmit = (formElement, usernameInputId, actionName) => {
+        if (!formElement) return;
+        formElement.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            const usernameInput = document.getElementById(usernameInputId);
+            const username = usernameInput ? usernameInput.value.trim() : '';
+            
+            const inputs = formElement.querySelectorAll('input');
+            let allFilled = true;
+            
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
+                    allFilled = false;
+                }
+            });
+
+            if (!allFilled) {
+                alert('Пожалуйста, заполните все поля!');
+                return;
+            }
+
+            alert(`${actionName} прошла успешно!`);
+            
+            currentUser = username;
+            localStorage.setItem('motoLandUser', currentUser);
+            updateAuthButtonUI();
+
+            if (authModal) {
+                authModal.style.display = 'none';
+            }
+
+            formElement.reset();
+        });
+    };
+
+    handleAuthSubmit(loginForm, 'loginUsername', 'Авторизация');
+    handleAuthSubmit(registerForm, 'regUsername', 'Регистрация');
 });
