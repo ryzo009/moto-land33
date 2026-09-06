@@ -19,6 +19,11 @@ body.theme-green {
     padding: 0;
 }
 
+html, body {
+    overflow-x: hidden; /* Жестко запрещаем сайту ездить влево-вправо */
+    width: 100%;
+}
+
 html {
     scroll-behavior: smooth;
 }
@@ -41,6 +46,7 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
+    width: 100%;
 }
 
 header h1 a {
@@ -138,6 +144,7 @@ nav ul li a.active {
 /* Панель управления */
 .controls {
     max-width: 1000px;
+    width: calc(100% - 30px);
     margin: 30px auto;
     padding: 20px;
     background: rgba(255, 255, 255, 0.03);
@@ -243,7 +250,7 @@ nav ul li a.active {
     margin: 0 auto;
     padding: 20px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 360px));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     justify-content: center;
     gap: 25px;
 }
@@ -280,7 +287,7 @@ nav ul li a.active {
 
 .card img {
     width: 100%;
-    height: 200px;
+    height: 180px;
     object-fit: contain;
     background: rgba(0, 0, 0, 0.2);
     border-radius: 10px;
@@ -350,6 +357,8 @@ nav ul li a.active {
     gap: 20px;
     z-index: 99;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    max-width: 95%;
+    text-align: center;
 }
 
 .compare-btn {
@@ -397,20 +406,21 @@ nav ul li a.active {
     font-size: 0.95rem;
 }
 
-/* Модалки */
+/* МОДАЛЬНЫЕ ОКНА (Идеальное центрирование и скролл для телефонов) */
 .modal {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     background-color: rgba(0, 0, 0, 0.85);
     backdrop-filter: blur(8px);
-    z-index: 1000;
+    z-index: 2000;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
+    overflow-y: auto; /* Позволяет прокручивать всю страницу если окно высокое */
 }
 
 .modal-content {
@@ -419,8 +429,12 @@ nav ul li a.active {
     border-radius: 20px;
     max-width: 800px;
     width: 100%;
+    max-height: 85vh; /* Ограничиваем высоту, чтобы окно не уходило за экран */
+    overflow-y: auto;  /* Внутренний скролл для текста, если он не помещается */
     position: relative;
     padding: 30px;
+    margin: auto;      /* Строго по центру экрана в любой ситуации */
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8);
 }
 
 .close-btn {
@@ -430,6 +444,7 @@ nav ul li a.active {
     font-size: 30px;
     cursor: pointer;
     color: #aaa;
+    z-index: 10;
 }
 
 .close-btn:hover {
@@ -440,19 +455,20 @@ nav ul li a.active {
     display: flex;
     gap: 25px;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .modal-body img {
     width: 100%;
-    max-width: 350px;
+    max-width: 320px;
     height: auto;
     object-fit: contain;
+    border-radius: 10px;
 }
 
 .modal-info {
     flex: 1;
-    min-width: 280px;
+    min-width: 250px;
 }
 
 .modal-info h2 {
@@ -557,12 +573,6 @@ nav ul li a.active {
     min-height: 18px;
 }
 
-.user-profile-btn {
-    background: rgba(0, 255, 136, 0.15) !important;
-    border: 1px solid #00ff88 !important;
-    color: #00ff88 !important;
-}
-
 /* Мобильная адаптивность */
 @media (max-width: 768px) {
     header {
@@ -574,17 +584,17 @@ nav ul li a.active {
     }
 
     .header-actions {
-        gap: 8px;
+        gap: 6px;
     }
 
     .theme-btn {
-        padding: 6px 10px;
-        font-size: 0.75rem;
+        padding: 5px 8px;
+        font-size: 0.7rem;
     }
 
     .button1 {
-        padding: 6px 12px;
-        font-size: 0.8rem;
+        padding: 6px 10px;
+        font-size: 0.75rem;
     }
 
     .hamburger {
@@ -602,7 +612,7 @@ nav ul li a.active {
         backdrop-filter: blur(15px);
         padding: 90px 25px 30px;
         transition: right 0.4s ease;
-        z-index: 999;
+        z-index: 1500;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.8);
     }
 
@@ -615,49 +625,50 @@ nav ul li a.active {
         gap: 20px;
     }
 
-    .modal {
-        padding: 10px;
-        align-items: center;
-        overflow-y: auto;
-    }
-
-    .modal-content {
-        padding: 20px 15px;
-        max-height: 90vh;
-        overflow-y: auto;
-        margin: auto;
-    }
-
-    .modal-body {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .modal-body img {
-        max-width: 100%;
-        height: 160px;
-    }
-
     .controls {
-        padding: 15px;
-        margin: 15px;
+        padding: 12px;
+        margin: 10px;
+        width: calc(100% - 20px);
     }
 
     .filter-group, .sort-group {
         flex-direction: column;
         align-items: flex-start;
+        gap: 8px;
     }
 
     .catalog {
         grid-template-columns: 1fr;
-        padding: 15px;
+        padding: 10px;
+    }
+
+    .modal {
+        padding: 10px;
+    }
+
+    .modal-content {
+        padding: 20px 15px;
+        max-height: 90vh;
+    }
+
+    .modal-body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .modal-body img {
+        max-width: 220px;
+    }
+    
+    .modal-specs {
+        text-align: left;
     }
 
     .compare-bar {
-        width: 90%;
-        padding: 10px 15px;
+        width: 92%;
+        padding: 10px;
         flex-direction: column;
-        gap: 10px;
-        text-align: center;
+        gap: 8px;
     }
 }
