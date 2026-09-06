@@ -15,11 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const bikeModal = document.getElementById('modal');
     const aboutModal = document.getElementById('aboutModal');
     const contactsModal = document.getElementById('contactsModal');
+    const authModal = document.getElementById('authModal');
+    const compareModal = document.getElementById('compareModal');
 
-    // Ссылки
+    // Ссылки в меню
     const aboutLink = document.getElementById('aboutLink');
     const contactsLink = document.getElementById('contactsLink');
     const catalogLink = document.getElementById('catalogLink');
+    const authBtn = document.getElementById('authBtn');
 
     // Мобильное меню (Гамбургер)
     const hamburger = document.getElementById('hamburger');
@@ -39,6 +42,43 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Открытие модалок через ссылки в меню
+    if (aboutLink) {
+        aboutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (aboutModal) aboutModal.style.display = 'flex';
+        });
+    }
+
+    if (contactsLink) {
+        contactsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (contactsModal) contactsModal.style.display = 'flex';
+        });
+    }
+
+    if (authBtn) {
+        authBtn.addEventListener('click', () => {
+            if (authModal) authModal.style.display = 'flex';
+        });
+    }
+
+    // Закрытие всех модалок по крестику
+    document.querySelectorAll('.close-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+        });
+    });
+
+    // Закрытие модалки по клику вне контента
+    window.addEventListener('click', (e) => {
+        document.querySelectorAll('.modal').forEach(modal => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
 
     // Темы
     const themeToggleBtn = document.getElementById('themeToggle');
@@ -103,15 +143,54 @@ document.addEventListener('DOMContentLoaded', () => {
             quarterMile: '11.7 сек'
         },
         'ducati panigale v4': {
-    desc: 'Флагманский супербайк Ducati с V-образным 4-цилиндровым двигателем Desmosedici Stradale.',
-    price: '$24,995',
-    topSpeed: '299+ км/ч',
-    accel100: '3.0 сек',
-    accel200: '4.5 сек',
-    quarterMile: '9.9 сек'
-}
+            desc: 'Флагманский супербайк Ducati с V-образным 4-цилиндровым двигателем Desmosedici Stradale.',
+            price: '$24,995',
+            topSpeed: '299+ км/ч',
+            accel100: '3.0 сек',
+            accel200: '4.5 сек',
+            quarterMile: '9.9 сек'
+        }
     };
-       
+
+    // Открытие модального окна подробной информации о байке
+    cards.forEach(card => {
+        const titleEl = card.querySelector('h3');
+        const detailBtn = card.querySelector('.card-btn');
+        const imgEl = card.querySelector('img');
+
+        const openDetails = () => {
+            const title = titleEl.textContent.trim();
+            const key = title.toLowerCase();
+            const data = bikeData[key] || {
+                desc: 'Информация о данном мотоцикле уточняется.',
+                price: 'По запросу',
+                topSpeed: 'н/д',
+                accel100: 'н/д',
+                accel200: 'н/д',
+                quarterMile: 'н/д'
+            };
+
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalImg').src = imgEl.src;
+            document.getElementById('modalDesc').textContent = data.desc;
+            document.getElementById('modalType').textContent = card.querySelector('.specs p:nth-child(1)').textContent.replace('Тип:', '').trim();
+            document.getElementById('modalYear').textContent = card.querySelector('.specs p:nth-child(2)').textContent.replace('Год:', '').trim();
+            document.getElementById('modalEngine').textContent = card.querySelector('.specs p:nth-child(3)').textContent.replace('Объем:', '').trim();
+            document.getElementById('modalPower').textContent = card.querySelector('.specs p:nth-child(4)').textContent.replace('Мощность:', '').trim();
+            document.getElementById('modalWeight').textContent = card.querySelector('.specs p:nth-child(5)').textContent.replace('Вес:', '').trim();
+            
+            document.getElementById('modalTopSpeed').textContent = data.topSpeed;
+            document.getElementById('modalAccel100').textContent = data.accel100;
+            document.getElementById('modalAccel200').textContent = data.accel200;
+            document.getElementById('modalQuarterMile').textContent = data.quarterMile;
+            document.getElementById('modalPrice').textContent = data.price;
+
+            if (bikeModal) bikeModal.style.display = 'flex';
+        };
+
+        if (detailBtn) detailBtn.addEventListener('click', openDetails);
+        if (imgEl) imgEl.addEventListener('click', openDetails);
+    });
 
     // ЛОГИКА ИЗБРАННОГО
     let favorites = JSON.parse(localStorage.getItem('motoFavorites')) || [];
@@ -220,12 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const compareBar = document.getElementById('compareBar');
     const compareCount = document.getElementById('compareCount');
     const openCompareBtn = document.getElementById('openCompareBtn');
-    const compareModal = document.getElementById('compareModal');
     const compareTable = document.getElementById('compareTable');
     let selectedBikes = [];
 
     cards.forEach(card => {
-        const title = card.querySelector('h3').textContent;
+        const title = card.querySelector('h3').textContent.trim();
         const compareLabel = document.createElement('label');
         compareLabel.className = 'card-compare-label';
         compareLabel.innerHTML = `
@@ -233,116 +311,70 @@ document.addEventListener('DOMContentLoaded', () => {
             Сравнить
         `;
         card.appendChild(compareLabel);
-    });
 
-    document.addEventListener('change', (e) => {
-        if (e.target.classList.contains('compare-checkbox')) {
-            const title = e.target.getAttribute('data-title');
-            
-            if (e.target.checked) {
+        const checkbox = compareLabel.querySelector('input');
+        checkbox.addEventListener('change', () => {
+            if (checkbox.checked) {
+                if (selectedBikes.length >= 3) {
+                    alert('Можно сравнивать не более 3 байков одновременно!');
+                    checkbox.checked = false;
+                    return;
+                }
                 selectedBikes.push(title);
             } else {
-                selectedBikes = selectedBikes.filter(item => item !== title);
+                selectedBikes = selectedBikes.filter(t => t !== title);
             }
 
-            if (selectedBikes.length > 0) {
-                compareBar.style.display = 'flex';
-                compareCount.textContent = `Выбрано для сравнения: ${selectedBikes.length}`;
-            } else {
-                compareBar.style.display = 'none';
+            if (compareBar) {
+                if (selectedBikes.length > 0) {
+                    compareBar.style.display = 'flex';
+                    if (compareCount) compareCount.textContent = `Выбрано для сравнения: ${selectedBikes.length}`;
+                } else {
+                    compareBar.style.display = 'none';
+                }
             }
-        }
+        });
     });
 
-    if (openCompareBtn && compareModal && compareTable) {
+    if (openCompareBtn) {
         openCompareBtn.addEventListener('click', () => {
+            if (selectedBikes.length === 0) return;
+
             let html = `
                 <tr>
                     <th>Параметр</th>
                     ${selectedBikes.map(title => `<th>${title}</th>`).join('')}
                 </tr>
-                <tr>
-                    <td>Фото</td>
-                    ${selectedBikes.map(title => {
-                        const key = title.toLowerCase().trim();
-                        const card = Array.from(cards).find(c => c.querySelector('h3').textContent.toLowerCase().trim() === key);
-                        const imgSrc = card ? card.querySelector('img').src : '';
-                        return `<td><img src="${imgSrc}" alt="${title}"></td>`;
-                    }).join('')}
-                </tr>
-                <tr>
-                    <td>Цена</td>
-                    ${selectedBikes.map(title => `<td><strong style="color: #00ff88;">${bikeData[title.toLowerCase().trim()]?.price || '—'}</strong></td>`).join('')}
-                </tr>
-                <tr>
-                    <td>Мощность</td>
-                    ${selectedBikes.map(title => {
-                        const card = Array.from(cards).find(c => c.querySelector('h3').textContent.toLowerCase().trim() === title.toLowerCase().trim());
-                        return `<td>${card ? card.dataset.power + ' л.с.' : '—'}</td>`;
-                    }).join('')}
-                </tr>
-                <tr>
-                    <td>Разгон 0-100</td>
-                    ${selectedBikes.map(title => `<td>${bikeData[title.toLowerCase().trim()]?.accel100 || '—'}</td>`).join('')}
-                </tr>
-                <tr>
-                    <td>Макс. скорость</td>
-                    ${selectedBikes.map(title => `<td>${bikeData[title.toLowerCase().trim()]?.topSpeed || '—'}</td>`).join('')}
-                </tr>
             `;
 
-            compareTable.innerHTML = html;
-            compareModal.style.display = 'flex';
+            const specsList = ['Тип', 'Год', 'Объем', 'Мощность', 'Вес'];
+            specsList.forEach((specName, idx) => {
+                html += `<tr><td><strong>${specName}</strong></td>`;
+                selectedBikes.forEach(title => {
+                    const card = Array.from(cards).find(c => c.querySelector('h3').textContent.trim() === title);
+                    const specText = card ? card.querySelectorAll('.specs p')[idx].innerHTML : '';
+                    html += `<td>${specText.replace(/<span>.*?<\/span>/, '')}</td>`;
+                });
+                html += `</tr>`;
+            });
+
+            if (compareTable) compareTable.innerHTML = html;
+            if (compareModal) compareModal.style.display = 'flex';
         });
     }
 
-    // ЛОГИКА АВТОРИЗАЦИИ И РЕГИСТРАЦИИ
-    const authModal = document.getElementById('authModal');
-    const authBtn = document.querySelector('.button1');
+    // Авторизация / Регистрация переключение вкладок
     const tabLogin = document.getElementById('tabLogin');
     const tabRegister = document.getElementById('tabRegister');
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
-    const loginError = document.getElementById('loginError');
-    const regError = document.getElementById('regError');
 
-    let users = JSON.parse(localStorage.getItem('motoUsers')) || [];
-    let currentUser = JSON.parse(localStorage.getItem('motoCurrentUser')) || null;
-
-    function updateAuthButton() {
-        if (!authBtn) return;
-        if (currentUser) {
-            authBtn.textContent = `👤 ${currentUser.username} (Выйти)`;
-            authBtn.classList.add('user-profile-btn');
-        } else {
-            authBtn.textContent = 'Авторизоваться';
-            authBtn.classList.remove('user-profile-btn');
-        }
-    }
-
-    updateAuthButton();
-
-    if (authBtn) {
-        authBtn.addEventListener('click', () => {
-            if (currentUser) {
-                if (confirm('Вы действительно хотите выйти?')) {
-                    currentUser = null;
-                    localStorage.removeItem('motoCurrentUser');
-                    updateAuthButton();
-                }
-            } else if (authModal) {
-                authModal.style.display = 'flex';
-            }
-        });
-    }
-
-    if (tabLogin && tabRegister) {
+    if (tabLogin && tabRegister && loginForm && registerForm) {
         tabLogin.addEventListener('click', () => {
             tabLogin.classList.add('active');
             tabRegister.classList.remove('active');
             loginForm.style.display = 'flex';
             registerForm.style.display = 'none';
-            loginError.textContent = '';
         });
 
         tabRegister.addEventListener('click', () => {
@@ -350,128 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tabLogin.classList.remove('active');
             registerForm.style.display = 'flex';
             loginForm.style.display = 'none';
-            regError.textContent = '';
         });
     }
-
-    if (registerForm) {
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('regUsername').value.trim();
-            const password = document.getElementById('regPassword').value.trim();
-
-            if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-                regError.textContent = 'Пользователь с таким именем уже существует!';
-                return;
-            }
-
-            const newUser = { username, password };
-            users.push(newUser);
-            localStorage.setItem('motoUsers', JSON.stringify(users));
-
-            currentUser = newUser;
-            localStorage.setItem('motoCurrentUser', JSON.stringify(currentUser));
-            
-            updateAuthButton();
-            authModal.style.display = 'none';
-            registerForm.reset();
-        });
-    }
-
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-
-            const foundUser = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-
-            if (!foundUser) {
-                loginError.textContent = 'Неверное имя пользователя или пароль!';
-                return;
-            }
-
-            currentUser = foundUser;
-            localStorage.setItem('motoCurrentUser', JSON.stringify(currentUser));
-
-            updateAuthButton();
-            authModal.style.display = 'none';
-            loginForm.reset();
-        });
-    }
-
-    // НАВИГАЦИЯ
-    if (catalogLink && catalogSection) {
-        catalogLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            catalogSection.scrollIntoView({ behavior: 'smooth' });
-        });
-    }
-
-    if (aboutLink && aboutModal) {
-        aboutLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            aboutModal.style.display = 'flex';
-        });
-    }
-
-    if (contactsLink && contactsModal) {
-        contactsLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            contactsModal.style.display = 'flex';
-        });
-    }
-
-    // МОДАЛКА КАРТОЧКИ
-    cards.forEach(card => {
-        const btn = card.querySelector('.card-btn');
-        if (!btn) return;
-
-        btn.addEventListener('click', () => {
-            const title = card.querySelector('h3').textContent;
-            const imgSrc = card.querySelector('img').src;
-            const specsP = card.querySelectorAll('.specs p');
-
-            const type = specsP[0] ? specsP[0].innerText.replace('Тип:', '').trim() : '';
-            const year = specsP[1] ? specsP[1].innerText.replace('Год:', '').trim() : '';
-            const engine = specsP[2] ? specsP[2].innerText.replace('Объем:', '').trim() : '';
-            const power = specsP[3] ? specsP[3].innerText.replace('Мощность:', '').trim() : '';
-            const weight = specsP[4] ? specsP[4].innerText.replace('Вес:', '').trim() : '';
-
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalImg').src = imgSrc;
-            document.getElementById('modalType').textContent = type;
-            document.getElementById('modalYear').textContent = year;
-            document.getElementById('modalEngine').textContent = engine;
-            document.getElementById('modalPower').textContent = power;
-            document.getElementById('modalWeight').textContent = weight;
-
-            const key = title.toLowerCase().trim();
-            const info = bikeData[key];
-
-            if (info) {
-                document.getElementById('modalDesc').textContent = info.desc;
-                document.getElementById('modalPrice').textContent = info.price;
-                document.getElementById('modalTopSpeed').textContent = info.topSpeed;
-                document.getElementById('modalAccel100').textContent = info.accel100;
-                document.getElementById('modalAccel200').textContent = info.accel200;
-                document.getElementById('modalQuarterMile').textContent = info.quarterMile;
-            }
-
-            bikeModal.style.display = 'flex';
-        });
-    });
-
-    // ЗАКРЫТИЕ МОДАЛОК
-    document.querySelectorAll('.close-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            btn.closest('.modal').style.display = 'none';
-        });
-    });
-
-    window.addEventListener('click', (e) => {
-        if (e.target.classList.contains('modal')) {
-            e.target.style.display = 'none';
-        }
-    });
 });
