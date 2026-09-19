@@ -686,16 +686,19 @@ nav ul li a.active {
     font-weight: bold;
 }
 
+/* ИСПРАВЛЕННЫЙ БЛОК: элементы теперь строго вертикально друг под другом на ПК и телефонах */
 .payment-form {
     display: flex;
-    flex-direction: column;
+    flex-direction: column !important;
     gap: 14px;
+    width: 100%;
 }
 
 .form-group-pay {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    width: 100%;
 }
 
 .form-group-pay label {
@@ -706,6 +709,7 @@ nav ul li a.active {
 }
 
 .form-group-pay input {
+    width: 100%;
     padding: 12px 14px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -724,9 +728,11 @@ nav ul li a.active {
 .form-row-pay {
     display: flex;
     gap: 12px;
+    width: 100%;
 }
 
 .pay-submit-btn {
+    width: 100% !important;
     margin-top: 10px;
     padding: 14px;
     background: linear-gradient(135deg, #00ff88, #00b359);
