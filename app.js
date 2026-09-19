@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Кнопка "Личный кабинет" в меню — открывает красивую модалку с таблицей
+    // Кнопка "Личный кабинет" в меню
     const profileBtn = document.getElementById('profileBtn');
     if (profileBtn) {
         profileBtn.addEventListener('click', () => {
@@ -237,53 +237,53 @@ document.addEventListener('DOMContentLoaded', () => {
             quarterMile: '9.9 сек'
         },
         'honda cbr1000rr-r': {
-                desc: 'Экстремальный трековый мотоцикл Honda с невероятной аэродинамикой и мотором, выдающим огромную мощность на высоких оборотах.',
-                price: '$28,500',
-                topSpeed: '314 км/ч',
-                accel100: '2.9 сек',
-                accel200: '4.3 сек',
-                quarterMile: '9.8 сек'
-            },
-            'suzuki hayabusa': {
-                desc: 'Легендарный соколиный гипербайк, синоним абсолютной скорости и невероятного комфорта на дальних пряниках.',
-                price: '$19,000',
-                topSpeed: '299 км/ч (ограничитель)',
-                accel100: '2.7 сек',
-                accel200: '4.2 сек',
-                quarterMile: '9.7 сек'
-            },
-            'ktm 1290 adventure': {
-                desc: 'Бескомпромиссный туристический эндуро для тех, кто ищет приключения там, где заканчивается асфальт.',
-                price: '$21,499',
-                topSpeed: '250 км/ч',
-                accel100: '3.4 сек',
-                accel200: '8.5 сек',
-                quarterMile: '11.2 сек'
-            },
-            'aprilia rsv4 factory': {
-                desc: 'Шедевр итальянской инженерной мысли с уникальным двигателем V4 и лучшей в классе управляемостью.',
-                price: '$25,999',
-                topSpeed: '305 км/ч',
-                accel100: '2.9 сек',
-                accel200: '4.4 сек',
-                quarterMile: '9.8 сек'
-            },
-            'triumph tiger 1200': {
-                desc: 'Премиальный британский турэндуро с трехцилиндровым двигателем, созданный для кругосветных путешествий.',
-                price: '$23,200',
-                topSpeed: '235 км/ч',
-                accel100: '3.5 сек',
-                accel200: '8.9 сек',
-                quarterMile: '11.5 сек'
-            },
-            'yamaha tenere 700': {
-                desc: 'Надежный, легкий и выносливый мотоцикл для серьезного бездорожья и автономных экспедиций.',
-                price: '$10,799',
-                topSpeed: '190 км/ч',
-                accel100: '4.2 сек',
-                accel200: '12.0 сек',
-                quarterMile: '12.8 сек'
-            }
+            desc: 'Экстремальный трековый мотоцикл Honda с невероятной аэродинамикой и мотором, выдающим огромную мощность на высоких оборотах.',
+            price: '$28,500',
+            topSpeed: '314 км/ч',
+            accel100: '2.9 сек',
+            accel200: '4.3 сек',
+            quarterMile: '9.8 сек'
+        },
+        'suzuki hayabusa': {
+            desc: 'Легендарный соколиный гипербайк, синоним абсолютной скорости и невероятного комфорта на дальних пряниках.',
+            price: '$19,000',
+            topSpeed: '299 км/ч (ограничитель)',
+            accel100: '2.7 сек',
+            accel200: '4.2 сек',
+            quarterMile: '9.7 сек'
+        },
+        'ktm 1290 adventure': {
+            desc: 'Бескомпромиссный туристический эндуро для тех, кто ищет приключения там, где заканчивается асфальт.',
+            price: '$21,499',
+            topSpeed: '250 км/ч',
+            accel100: '3.4 сек',
+            accel200: '8.5 сек',
+            quarterMile: '11.2 сек'
+        },
+        'aprilia rsv4 factory': {
+            desc: 'Шедевр итальянской инженерной мысли с уникальным двигателем V4 и лучшей в классе управляемостью.',
+            price: '$25,999',
+            topSpeed: '305 км/ч',
+            accel100: '2.9 сек',
+            accel200: '4.4 сек',
+            quarterMile: '9.8 сек'
+        },
+        'triumph tiger 1200': {
+            desc: 'Премиальный британский турэндуро с трехцилиндровым двигателем, созданный для кругосветных путешествий.',
+            price: '$23,200',
+            topSpeed: '235 км/ч',
+            accel100: '3.5 сек',
+            accel200: '8.9 сек',
+            quarterMile: '11.5 сек'
+        },
+        'yamaha tenere 700': {
+            desc: 'Надежный, легкий и выносливый мотоцикл для серьезного бездорожья и автономных экспедиций.',
+            price: '$10,799',
+            topSpeed: '190 км/ч',
+            accel100: '4.2 сек',
+            accel200: '12.0 сек',
+            quarterMile: '12.8 сек'
+        }
     };
 
     // Открытие модального окна подробной информации о байке
@@ -484,7 +484,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const specsList = ['Тип', 'Год', 'Объем', 'Мощность', 'Вес'];
             specsList.forEach((specName, idx) => {
                 html += `<tr><td><strong>${specName}</strong></td>`;
-                selectedBilsLoop:
                 selectedBikes.forEach(title => {
                     const card = Array.from(cards).find(c => c.querySelector('h3').textContent.trim() === title);
                     const specText = card ? card.querySelectorAll('.specs p')[idx].innerHTML : '';
@@ -559,4 +558,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     handleAuthSubmit(loginForm, 'loginUsername', 'Авторизация');
     handleAuthSubmit(registerForm, 'regUsername', 'Регистрация');
+
+    // ПРЕМИАЛЬНАЯ ФЕЙКОВАЯ ПЛАТЕЖНАЯ СИСТЕМА
+    const buyFakeBtn = document.getElementById('buyFakeBtn');
+    const fakePaymentModal = document.getElementById('fakePaymentModal');
+    const paymentBikeTitle = document.getElementById('paymentBikeTitle');
+    const fakePaymentForm = document.getElementById('fakePaymentForm');
+    const paymentSuccessBlock = document.getElementById('paymentSuccessBlock');
+    const closeSuccessBtn = document.getElementById('closeSuccessBtn');
+
+    // Элементы превью карты
+    const inputCardNum = document.getElementById('inputCardNum');
+    const inputCardExpires = document.getElementById('inputCardExpires');
+    const inputCardHolder = document.getElementById('inputCardHolder');
+    
+    const previewCardNum = document.getElementById('previewCardNum');
+    const previewCardHolder = document.getElementById('previewCardHolder');
+    const previewCardExpires = document.getElementById('previewCardExpires');
+
+    if (buyFakeBtn && fakePaymentModal) {
+        buyFakeBtn.addEventListener('click', () => {
+            const currentBikeTitle = document.getElementById('modalTitle').textContent;
+            const currentPrice = document.getElementById('modalPrice').textContent;
+            
+            paymentBikeTitle.textContent = `Покупка модели: ${currentBikeTitle} за ${currentPrice}`;
+            
+            // Сброс полей
+            fakePaymentForm.style.display = 'flex';
+            paymentSuccessBlock.style.display = 'none';
+            fakePaymentForm.reset();
+            
+            // Сброс превью карты
+            if (previewCardNum) previewCardNum.textContent = '•••• •••• •••• ••••';
+            if (previewCardHolder) previewCardHolder.textContent = 'CARDHOLDER NAME';
+            if (previewCardExpires) previewCardExpires.textContent = 'MM/YY';
+
+            if (bikeModal) bikeModal.style.display = 'none';
+            fakePaymentModal.style.display = 'flex';
+        });
+    }
+
+    // Интерактивное обновление карты при вводе
+    if (inputCardNum && previewCardNum) {
+        inputCardNum.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').substring(0, 16);
+            let formatted = val.match(/.{1,4}/g)?.join(' ') || '•••• •••• •••• ••••';
+            previewCardNum.textContent = formatted;
+            e.target.value = formatted;
+        });
+    }
+
+    if (inputCardExpires && previewCardExpires) {
+        inputCardExpires.addEventListener('input', (e) => {
+            let val = e.target.value.replace(/\D/g, '').substring(0, 4);
+            if (val.length >= 3) {
+                val = val.substring(0, 2) + '/' + val.substring(2);
+            }
+            previewCardExpires.textContent = val || 'MM/YY';
+            e.target.value = val;
+        });
+    }
+
+    if (inputCardHolder && previewCardHolder) {
+        inputCardHolder.addEventListener('input', (e) => {
+            previewCardHolder.textContent = e.target.value.toUpperCase() || 'CARDHOLDER NAME';
+        });
+    }
+
+    if (fakePaymentForm) {
+        fakePaymentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Переключение на блок успеха
+            fakePaymentForm.style.display = 'none';
+            paymentSuccessBlock.style.display = 'block';
+
+            // Сохраняем покупку в localStorage
+            let userPurchases = JSON.parse(localStorage.getItem('motoPurchases')) || [];
+            const currentBikeTitle = document.getElementById('modalTitle').textContent;
+            userPurchases.push({ bike: currentBikeTitle, date: new Date().toLocaleDateString() });
+            localStorage.setItem('motoPurchases', JSON.stringify(userPurchases));
+        });
+    }
+
+    if (closeSuccessBtn && fakePaymentModal) {
+        closeSuccessBtn.addEventListener('click', () => {
+            fakePaymentModal.style.display = 'none';
+        });
+    }
 });
